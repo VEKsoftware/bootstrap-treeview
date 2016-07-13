@@ -442,9 +442,32 @@
 	};
 
 	Tree.prototype._sortNodes = function () {
-		return $.map(Object.keys(this._nodes).sort(), $.proxy(function (value, index) {
+		return $.map(Object.keys(this._nodes)._sortVersions(), $.proxy(function (value, index) {
 		  return this._nodes[value];
 		}, this));
+	};
+
+	Array.prototype._sortVersions = function () {
+		return this.map(function (e) {
+			return e.split('.').map(function (e) {
+					return parseInt(e)
+				}
+			)
+		}).sort(function (a, b) {
+
+			if (a.length > b.length) {
+				return 1;
+			} else {
+				return -1;
+			}
+
+			for (var i = 0; i < Math.max(a.length, b.length); i++) {
+				if (a[i] - b[i] != 0) return a[i] - b[i];
+			}
+			return 0;
+		}).map(function (e) {
+			return e.join('.')
+		});
 	};
 
 	Tree.prototype._clickHandler = function (event) {
