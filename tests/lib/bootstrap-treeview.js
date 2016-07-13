@@ -454,15 +454,17 @@
 				}
 			)
 		}).sort(function (a, b) {
+			for (var i = 1; i < Math.max(a.length, b.length); i++) {
+				if (a[i] > b[i]) return 1;
+				if (a[i] < b[i]) return -1;
 
-			if (a.length > b.length) {
-				return 1;
-			} else {
-				return -1;
-			}
+				if ((a[i] === undefined) && (a[i-1] == b[i-1]))return -1;
+				if ((a[i] === undefined) && (a[i-1] < b[i-1])) return -1;
+				if ((a[i] === undefined) && (a[i-1] > b[i-1])) return 1;
 
-			for (var i = 0; i < Math.max(a.length, b.length); i++) {
-				if (a[i] - b[i] != 0) return a[i] - b[i];
+				if ((b[i] === undefined) && (a[i-1] == b[i-1]))  return 1;
+				if ((b[i] === undefined) && (a[i-1] < b[i-1]))  return 1;
+				if ((b[i] === undefined) && (a[i-1] > b[i-1])) return -1;
 			}
 			return 0;
 		}).map(function (e) {
